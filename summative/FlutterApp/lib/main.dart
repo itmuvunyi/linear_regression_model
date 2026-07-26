@@ -12,7 +12,7 @@ class SolarPowerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Solar Power Prediction System',
+      title: 'Solar Power Predictor',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
@@ -44,7 +44,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
 
   // API Base URL controller (Defaults to Android Emulator or localhost)
   final TextEditingController _apiUrlController =
-      TextEditingController(text: 'http://127.0.0.1:8000');
+      TextEditingController(text: 'https://solar-power-prediction-api.onrender.com');
 
   // Input Controllers with realistic sample defaults
   final TextEditingController _tempController = TextEditingController(text: '22.5');
@@ -150,7 +150,6 @@ class _PredictionScreenState extends State<PredictionScreen> {
     required String unit,
     required double minVal,
     required double maxVal,
-    required IconData icon,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -162,7 +161,6 @@ class _PredictionScreenState extends State<PredictionScreen> {
           labelText: label,
           hintText: hint,
           suffixText: unit,
-          prefixIcon: Icon(icon, color: const Color(0xFFFF9800)),
           filled: true,
           fillColor: const Color(0xFF2A2A2A),
           border: OutlineInputBorder(
@@ -204,7 +202,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Solar Power Prediction System',
+          'Solar Power Predictor',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         centerTitle: true,
@@ -239,12 +237,11 @@ class _PredictionScreenState extends State<PredictionScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: const Column(
                   children: [
-                    Icon(Icons.solar_power_rounded, size: 48, color: Colors.white),
                     SizedBox(height: 8),
                     Text(
                       'AI Solar Energy Optimizer',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -260,25 +257,6 @@ class _PredictionScreenState extends State<PredictionScreen> {
               ),
 
               const SizedBox(height: 16),
-
-              // API Endpoint Configuration Card
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: TextFormField(
-                    controller: _apiUrlController,
-                    decoration: const InputDecoration(
-                      labelText: 'FastAPI Service Base URL',
-                      hintText: 'http://127.0.0.1:8000',
-                      prefixIcon: Icon(Icons.dns_rounded, color: Colors.amber),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (val) => val == null || val.isEmpty ? 'API URL is required' : null,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 12),
 
               // Section 1: Meteorological Parameters
               const Padding(
@@ -296,7 +274,6 @@ class _PredictionScreenState extends State<PredictionScreen> {
                 unit: '°C',
                 minVal: -30.0,
                 maxVal: 60.0,
-                icon: Icons.thermostat_rounded,
               ),
 
               _buildTextField(
@@ -306,7 +283,6 @@ class _PredictionScreenState extends State<PredictionScreen> {
                 unit: '%',
                 minVal: 0.0,
                 maxVal: 100.0,
-                icon: Icons.water_drop_rounded,
               ),
 
               _buildTextField(
@@ -316,7 +292,6 @@ class _PredictionScreenState extends State<PredictionScreen> {
                 unit: 'hPa',
                 minVal: 850.0,
                 maxVal: 1100.0,
-                icon: Icons.compress_rounded,
               ),
 
               _buildTextField(
@@ -326,7 +301,6 @@ class _PredictionScreenState extends State<PredictionScreen> {
                 unit: '%',
                 minVal: 0.0,
                 maxVal: 100.0,
-                icon: Icons.cloud_rounded,
               ),
 
               _buildTextField(
@@ -336,7 +310,6 @@ class _PredictionScreenState extends State<PredictionScreen> {
                 unit: 'W/m²',
                 minVal: 0.0,
                 maxVal: 1200.0,
-                icon: Icons.wb_sunny_outlined,
               ),
 
               _buildTextField(
@@ -346,7 +319,6 @@ class _PredictionScreenState extends State<PredictionScreen> {
                 unit: 'm/s',
                 minVal: 0.0,
                 maxVal: 150.0,
-                icon: Icons.air_rounded,
               ),
 
               _buildTextField(
@@ -356,7 +328,6 @@ class _PredictionScreenState extends State<PredictionScreen> {
                 unit: '°',
                 minVal: 0.0,
                 maxVal: 360.0,
-                icon: Icons.explore_rounded,
               ),
 
               const SizedBox(height: 12),
@@ -377,7 +348,6 @@ class _PredictionScreenState extends State<PredictionScreen> {
                 unit: '°',
                 minVal: 0.0,
                 maxVal: 180.0,
-                icon: Icons.details_rounded,
               ),
 
               _buildTextField(
@@ -387,7 +357,6 @@ class _PredictionScreenState extends State<PredictionScreen> {
                 unit: '°',
                 minVal: 0.0,
                 maxVal: 180.0,
-                icon: Icons.brightness_high_rounded,
               ),
 
               _buildTextField(
@@ -397,24 +366,26 @@ class _PredictionScreenState extends State<PredictionScreen> {
                 unit: '°',
                 minVal: 0.0,
                 maxVal: 360.0,
-                icon: Icons.compass_calibration_rounded,
               ),
 
               const SizedBox(height: 20),
 
               // Predict Button
-              ElevatedButton.icon(
+              ElevatedButton(
                 onPressed: _isLoading ? null : _submitPrediction,
-                icon: _isLoading
+                child: _isLoading
                     ? const SizedBox(
                         width: 20,
                         height: 20,
                         child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                       )
-                    : const Icon(Icons.bolt_rounded, size: 24),
-                label: Text(
-                  _isLoading ? 'Predicting Power...' : 'Predict Solar Power',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    : const Text(
+                  'Predict Solar Power',
+                  style: TextStyle(
+                    fontSize: 16, 
+                    fontWeight: FontWeight.bold, 
+                    color: Colors.white
+                  ),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFE65100),
@@ -467,7 +438,6 @@ class _PredictionScreenState extends State<PredictionScreen> {
                         const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.power_rounded, color: Color(0xFF81C784)),
                             SizedBox(width: 8),
                             Text(
                               'Predicted Solar Power:',
@@ -491,7 +461,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
                         ),
                         const SizedBox(height: 4),
                         const Text(
-                          'Estimated instantaneous photovoltaic energy generation.',
+                          'Expected solar power generation',
                           style: TextStyle(fontSize: 12, color: Colors.white70),
                         ),
                       ],
