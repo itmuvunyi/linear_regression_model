@@ -83,3 +83,8 @@ Solar photovoltaic production is highly intermittent and strongly dependent on a
    ```bash
    uv run jupyter lab
    ```
+
+## A Live Demo Video Link
+```bash
+https://www.youtube.com/watch?v=CmSk4Vzv5zU
+```
